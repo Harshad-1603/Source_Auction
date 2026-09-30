@@ -1,10 +1,10 @@
-// Replace ONLY the values below with the Firebase Web App config from:
-// Firebase Console → Project settings → Your apps → Web app → SDK setup and configuration.
+// Firebase Web App configuration for Source Auction
 export const firebaseConfig = {
-  apiKey: "PASTE_YOUR_API_KEY",
-  authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
-  projectId: "PASTE_YOUR_PROJECT_ID",
-  storageBucket: "PASTE_YOUR_PROJECT.firebasestorage.app",
-  messagingSenderId: "PASTE_YOUR_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID"
+  apiKey: "AIzaSyAqLpqIzVTpZgea1EJipCR3iTieDuqmIrU",
+  authDomain: "source-auction.firebaseapp.com",
+  projectId: "source-auction",
+  storageBucket: "source-auction.firebasestorage.app",
+  messagingSenderId: "389335453215",
+  appId: "1:389335453215:web:e71b3968063d48f1ed8f2a",
+  measurementId: "G-JBVLJLPSM3"
 };
