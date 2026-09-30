@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#111827" />
+  <title>The Source Auction</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">GSOE9010 · Literature Search</p>
+      <h1>The Source Auction</h1>
+      <p class="subtitle">Storage Wars meets academic source evaluation.</p>
+    </div>
+
+    <div class="timer-wrap">
+      <div class="timer-label">Round timer</div>
+      <div id="timerDisplay" class="timer">01:00</div>
+      <div class="timer-actions">
+        <button id="timerStartBtn" class="btn btn-secondary btn-small">Start</button>
+        <button id="timerPauseBtn" class="btn btn-secondary btn-small">Pause</button>
+        <button id="timerResetBtn" class="btn btn-secondary btn-small">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <nav class="tabs" aria-label="Game stages">
+      <button class="tab active" data-screen="setup">1. Setup</button>
+      <button class="tab" data-screen="auction">2. Auction</button>
+      <button class="tab" data-screen="updates">3. Market Updates</button>
+      <button class="tab" data-screen="trading">4. Trading Floor</button>
+      <button class="tab" data-screen="ranking">5. Ranking</button>
+      <button class="tab" data-screen="results">6. Results</button>
+    </nav>
+
+    <section id="setup" class="screen active">
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="kicker">Game setup</p>
+            <h2>Prepare the six project groups</h2>
+          </div>
+          <button id="resetGameBtn" class="btn btn-danger">Reset whole game</button>
+        </div>
+
+        <div class="settings-grid">
+          <label>
+            Starting budget
+            <input id="startingBudget" type="number" min="100" step="50" value="1000" />
+          </label>
+          <label>
+            Minimum bid
+            <input id="minimumBid" type="number" min="10" step="10" value="50" />
+          </label>
+          <label>
+            Bid increment
+            <input id="bidIncrement" type="number" min="10" step="10" value="50" />
+          </label>
+          <label>
+            Max sources / team
+            <input id="maxSources" type="number" min="1" max="6" value="2" />
+          </label>
+        </div>
+
+        <div id="teamSetup" class="team-setup"></div>
+
+        <div class="callout">
+          <strong>Recommended host rule:</strong>
+          one source can only be owned by one group, and a team can own at most two sources.
+          Teams may later trade sources, swap sources, or add cash to a deal.
+        </div>
+
+        <button id="saveSetupBtn" class="btn btn-primary btn-large">Save setup & open auction</button>
+      </div>
+    </section>
+
+    <section id="auction" class="screen">
+      <div class="auction-layout">
+        <div class="panel auction-panel">
+          <div class="lot-topline">
+            <span id="lotBadge" class="badge">LOT A</span>
+            <span id="lotStatus" class="status-pill">AVAILABLE</span>
+          </div>
+
+          <h2 id="lotTitle">A recent study on your engineering topic</h2>
+          <p id="lotTeaser" class="lot-teaser">
+            A recently published study investigating a technology directly related to an engineering project.
+          </p>
+
+          <div class="bid-board">
+            <div>
+              <span class="metric-label">Current bid</span>
+              <strong id="currentBid">$0</strong>
+            </div>
+            <div>
+              <span class="metric-label">Highest bidder</span>
+              <strong id="highestBidder">—</strong>
+            </div>
+          </div>
+
+          <div class="quick-actions">
+            <button id="minusBidBtn" class="btn btn-secondary">− Bid</button>
+            <button id="plusBidBtn" class="btn btn-secondary">+ Bid</button>
+            <button id="soldBtn" class="btn btn-sold">SOLD!</button>
+          </div>
+
+          <p class="helper">Select a team below to place or raise a bid.</p>
+          <div id="bidTeamButtons" class="bid-team-buttons"></div>
+
+          <div class="lot-nav">
+            <button id="prevLotBtn" class="btn btn-secondary">← Previous lot</button>
+            <button id="nextLotBtn" class="btn btn-primary">Next lot →</button>
+          </div>
+        </div>
+
+        <aside class="panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="kicker">Live scoreboard</p>
+              <h2>Teams</h2>
+            </div>
+          </div>
+          <div id="auctionTeams" class="team-cards"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="updates" class="screen">
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="kicker">Breaking research intelligence</p>
+            <h2>Market Updates</h2>
+          </div>
+          <div class="update-actions">
+            <button id="revealUpdate1Btn" class="btn btn-warning">Reveal Update #1</button>
+            <button id="revealFinalBtn" class="btn btn-primary">Reveal Final Intelligence</button>
+          </div>
+        </div>
+
+        <div class="alert-banner" id="marketBanner">
+          MARKET OPEN — hidden information can change the value of a source.
+        </div>
+
+        <div id="sourceIntelGrid" class="intel-grid"></div>
+      </div>
+    </section>
+
+    <section id="trading" class="screen">
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="kicker">60-second negotiation round</p>
+            <h2>Trading Floor</h2>
+          </div>
+          <button id="startTradingTimerBtn" class="btn btn-warning">Start 60s trading timer</button>
+        </div>
+
+        <p class="lead">
+          Teams may sell a source, swap sources, or add cash to a deal. The host records the final agreed trade here.
+        </p>
+
+        <div class="trade-grid">
+          <div class="trade-card">
+            <h3>Transfer / sell a source</h3>
+            <label>From team
+              <select id="tradeFromTeam"></select>
+            </label>
+            <label>Source
+              <select id="tradeSource"></select>
+            </label>
+            <label>To team
+              <select id="tradeToTeam"></select>
+            </label>
+            <label>Cash paid by receiving team
+              <input id="tradePrice" type="number" min="0" step="50" value="0" />
+            </label>
+            <button id="executeTransferBtn" class="btn btn-primary">Execute transfer</button>
+          </div>
+
+          <div class="trade-card">
+            <h3>Swap sources</h3>
+            <label>Team A
+              <select id="swapTeamA"></select>
+            </label>
+            <label>Team A source
+              <select id="swapSourceA"></select>
+            </label>
+            <label>Team B
+              <select id="swapTeamB"></select>
+            </label>
+            <label>Team B source
+              <select id="swapSourceB"></select>
+            </label>
+            <button id="executeSwapBtn" class="btn btn-primary">Execute swap</button>
+          </div>
+        </div>
+
+        <div id="tradingTeams" class="team-cards"></div>
+      </div>
+    </section>
+
+    <section id="ranking" class="screen">
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="kicker">Final academic judgement</p>
+            <h2>Rank all six sources</h2>
+          </div>
+          <button id="showSuggestedBtn" class="btn btn-warning">Reveal suggested ranking</button>
+        </div>
+
+        <p class="lead">
+          Each group ranks A–F from strongest to weakest. Enter a six-letter order such as <strong>ABCDEF</strong>.
+        </p>
+
+        <div id="rankingForms" class="ranking-grid"></div>
+
+        <div id="suggestedRanking" class="suggested-ranking hidden">
+          <h3>Suggested ranking</h3>
+          <ol>
+            <li><strong>A</strong> — Recent peer-reviewed journal article</li>
+            <li><strong>B</strong> — Australian Government technical report</li>
+            <li><strong>C</strong> — Recent academic conference paper</li>
+            <li><strong>D</strong> — Company technical white paper</li>
+            <li><strong>E</strong> — Wikipedia article with references</li>
+            <li><strong>F</strong> — Personal blog with no references</li>
+          </ol>
+          <p class="note">
+            Use this as a suggested ranking, not as a claim that this order is universal in every research context.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="results" class="screen">
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="kicker">Final score</p>
+            <h2>Research Investment Champions</h2>
+          </div>
+          <button id="recalculateBtn" class="btn btn-primary">Recalculate scores</button>
+        </div>
+
+        <div class="scoring-key">
+          <div><strong>Source points:</strong> A=12 · B=10 · C=8 · D=6 · E=3 · F=1</div>
+          <div><strong>Cash bonus:</strong> +1 per $100 remaining, capped at +5</div>
+          <div><strong>Ranking bonus:</strong> +3 top three exact · +1 strongest exact · +1 weakest exact</div>
+        </div>
+
+        <div id="winnerBanner" class="winner-banner">Complete the game to reveal the winner.</div>
+        <div id="resultsTableWrap"></div>
+
+        <div class="takeaway">
+          <h3>Closing takeaway</h3>
+          <p>
+            Do not trust a source because it looks professional. Check who created it, where it was published,
+            what evidence supports it, whether there may be bias, how current it is, and whether it is relevant to the research question.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="soldOverlay" class="sold-overlay" aria-hidden="true">
+      <div class="sold-stamp">SOLD!</div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

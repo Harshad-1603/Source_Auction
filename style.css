@@ -1,0 +1,511 @@
+:root {
+  --bg: #0f172a;
+  --panel: #111827;
+  --panel-2: #1f2937;
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --line: #334155;
+  --accent: #22c55e;
+  --accent-2: #38bdf8;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --purple: #a78bfa;
+  --shadow: 0 18px 50px rgba(0,0,0,.25);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top right, rgba(56,189,248,.14), transparent 34%),
+    radial-gradient(circle at top left, rgba(167,139,250,.12), transparent 28%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+button, input, select { font: inherit; }
+
+button { cursor: pointer; }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px clamp(18px, 4vw, 54px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(15,23,42,.82);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.eyebrow, .kicker {
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .76rem;
+  color: #93c5fd;
+  font-weight: 800;
+}
+
+h1, h2, h3, p { margin-top: 0; }
+
+h1 { margin-bottom: 6px; font-size: clamp(1.9rem, 4vw, 3rem); }
+h2 { margin-bottom: 0; font-size: clamp(1.45rem, 2.5vw, 2rem); }
+h3 { margin-bottom: 12px; }
+
+.subtitle, .lead, .helper, .note { color: var(--muted); }
+
+.timer-wrap {
+  min-width: 210px;
+  text-align: right;
+  align-self: center;
+}
+
+.timer-label {
+  color: var(--muted);
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.timer {
+  font-size: 2rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+main {
+  width: min(1400px, 96%);
+  margin: 0 auto;
+  padding: 24px 0 60px;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.tab {
+  border: 1px solid var(--line);
+  background: rgba(17,24,39,.78);
+  color: var(--muted);
+  border-radius: 12px;
+  padding: 12px 10px;
+  font-weight: 800;
+}
+
+.tab.active {
+  color: white;
+  border-color: #38bdf8;
+  background: rgba(56,189,248,.14);
+}
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+.panel {
+  background: linear-gradient(180deg, rgba(17,24,39,.96), rgba(15,23,42,.94));
+  border: 1px solid rgba(148,163,184,.18);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: clamp(18px, 3vw, 30px);
+}
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.panel-heading.compact { margin-bottom: 16px; }
+
+.settings-grid,
+.trade-grid,
+.ranking-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.settings-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+.trade-grid { grid-template-columns: repeat(2, minmax(0,1fr)); margin-bottom: 22px; }
+.ranking-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+
+label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: .9rem;
+}
+
+input, select {
+  width: 100%;
+  border: 1px solid var(--line);
+  color: var(--text);
+  background: #0b1220;
+  border-radius: 10px;
+  padding: 11px 12px;
+  outline: none;
+}
+
+input:focus, select:focus { border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(56,189,248,.14); }
+
+.team-setup {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 14px;
+  margin: 22px 0;
+}
+
+.team-setup .team-input {
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--line);
+  padding: 14px;
+  border-radius: 14px;
+}
+
+.callout, .takeaway, .scoring-key {
+  border: 1px solid rgba(56,189,248,.25);
+  background: rgba(56,189,248,.08);
+  padding: 16px;
+  border-radius: 14px;
+  color: #dbeafe;
+  margin: 18px 0;
+}
+
+.btn {
+  border: 0;
+  border-radius: 11px;
+  padding: 11px 15px;
+  font-weight: 850;
+  color: white;
+  background: #334155;
+}
+
+.btn:hover { filter: brightness(1.08); }
+.btn:disabled { opacity: .45; cursor: not-allowed; filter: none; }
+
+.btn-primary { background: #2563eb; }
+.btn-secondary { background: #334155; }
+.btn-warning { background: #d97706; }
+.btn-danger { background: #b91c1c; }
+.btn-sold { background: #16a34a; font-size: 1.12rem; }
+.btn-large { padding: 14px 18px; }
+.btn-small { padding: 7px 10px; font-size: .82rem; }
+
+.auction-layout {
+  display: grid;
+  grid-template-columns: 1.45fr .8fr;
+  gap: 18px;
+}
+
+.auction-panel { min-height: 580px; }
+
+.lot-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(167,139,250,.14);
+  color: #ddd6fe;
+  border: 1px solid rgba(167,139,250,.35);
+  border-radius: 999px;
+  padding: 7px 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 7px 11px;
+  font-weight: 900;
+  background: rgba(34,197,94,.13);
+  color: #bbf7d0;
+  border: 1px solid rgba(34,197,94,.28);
+}
+
+.status-pill.sold {
+  background: rgba(148,163,184,.13);
+  color: #e2e8f0;
+  border-color: rgba(148,163,184,.28);
+}
+
+.lot-teaser {
+  color: var(--muted);
+  font-size: 1.04rem;
+  line-height: 1.65;
+}
+
+.bid-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.bid-board > div {
+  background: #0b1220;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.metric-label {
+  display: block;
+  color: var(--muted);
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 8px;
+}
+
+.bid-board strong { font-size: clamp(1.5rem, 3vw, 2.4rem); }
+
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bid-team-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+  margin: 14px 0 20px;
+}
+
+.bid-team-buttons .btn {
+  min-height: 72px;
+  text-align: left;
+}
+
+.bid-team-buttons .btn span {
+  display: block;
+  color: #cbd5e1;
+  font-size: .78rem;
+  margin-top: 4px;
+}
+
+.lot-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.team-cards {
+  display: grid;
+  gap: 10px;
+}
+
+.team-card {
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.025);
+  border-radius: 14px;
+  padding: 13px;
+}
+
+.team-card.top {
+  border-color: rgba(34,197,94,.5);
+  background: rgba(34,197,94,.06);
+}
+
+.team-card-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.team-name { font-weight: 900; }
+.cash { color: #86efac; font-weight: 900; }
+.owned { margin-top: 7px; color: var(--muted); font-size: .86rem; }
+
+.update-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.alert-banner {
+  border-radius: 14px;
+  padding: 15px;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: .05em;
+  background: rgba(245,158,11,.13);
+  border: 1px solid rgba(245,158,11,.3);
+  color: #fde68a;
+  margin-bottom: 18px;
+}
+
+.intel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 14px;
+}
+
+.intel-card {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  background: rgba(255,255,255,.025);
+  min-height: 180px;
+}
+
+.intel-card.revealed {
+  border-color: rgba(56,189,248,.4);
+  background: rgba(56,189,248,.06);
+}
+
+.intel-card h3 { display: flex; justify-content: space-between; gap: 10px; }
+.intel-card ul { margin-bottom: 0; padding-left: 20px; color: var(--muted); line-height: 1.55; }
+.locked { color: #94a3b8; font-style: italic; }
+
+.trade-card {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+  background: rgba(255,255,255,.025);
+  display: grid;
+  gap: 13px;
+}
+
+.ranking-card {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  background: rgba(255,255,255,.025);
+}
+
+.rank-feedback { min-height: 20px; margin-top: 8px; color: #fca5a5; font-size: .85rem; }
+
+.suggested-ranking {
+  margin-top: 24px;
+  border: 1px solid rgba(34,197,94,.35);
+  background: rgba(34,197,94,.07);
+  padding: 18px;
+  border-radius: 16px;
+}
+
+.suggested-ranking ol { line-height: 1.75; }
+
+.hidden { display: none; }
+
+.scoring-key {
+  display: grid;
+  gap: 6px;
+  margin-top: 0;
+}
+
+.winner-banner {
+  margin: 18px 0;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+  font-weight: 950;
+  background: linear-gradient(135deg, rgba(34,197,94,.14), rgba(56,189,248,.14));
+  border: 1px solid rgba(56,189,248,.25);
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.results-table th,
+.results-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 12px 10px;
+  text-align: left;
+}
+
+.results-table th { color: #bfdbfe; font-size: .82rem; text-transform: uppercase; letter-spacing: .05em; }
+
+.results-table tr:first-child td { background: rgba(34,197,94,.06); }
+
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  max-width: min(420px, calc(100% - 44px));
+  background: #020617;
+  border: 1px solid #475569;
+  border-radius: 12px;
+  padding: 13px 15px;
+  color: white;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: .2s ease;
+  z-index: 50;
+}
+
+.toast.show { opacity: 1; transform: translateY(0); }
+
+.sold-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(2,6,23,.42);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .16s ease;
+  z-index: 60;
+}
+
+.sold-overlay.show { opacity: 1; }
+
+.sold-stamp {
+  border: 8px solid #22c55e;
+  color: #dcfce7;
+  background: rgba(20,83,45,.88);
+  border-radius: 18px;
+  padding: 18px 34px;
+  font-weight: 1000;
+  font-size: clamp(3rem, 12vw, 8rem);
+  transform: rotate(-8deg) scale(.75);
+  animation: stamp .38s ease forwards;
+  box-shadow: 0 18px 70px rgba(0,0,0,.35);
+}
+
+@keyframes stamp {
+  to { transform: rotate(-8deg) scale(1); }
+}
+
+@media (max-width: 980px) {
+  .tabs { grid-template-columns: repeat(3, 1fr); }
+  .auction-layout, .trade-grid { grid-template-columns: 1fr; }
+  .settings-grid { grid-template-columns: repeat(2, 1fr); }
+  .team-setup, .ranking-grid, .intel-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .topbar { position: static; flex-direction: column; }
+  .timer-wrap { text-align: left; }
+  .timer-actions { justify-content: flex-start; }
+  .tabs { grid-template-columns: repeat(2, 1fr); }
+  .settings-grid, .team-setup, .ranking-grid, .intel-grid, .bid-team-buttons, .bid-board { grid-template-columns: 1fr; }
+  .panel-heading { align-items: flex-start; flex-direction: column; }
+  .lot-nav { flex-direction: column; }
+  .lot-nav .btn { width: 100%; }
+}
