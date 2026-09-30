@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team · The Source Auction</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient-bg" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+    <span class="grid-glow"></span>
+  </div>
+  <header class="topbar compact-topbar">
+    <div>
+      <p class="eyebrow">Project Group Portal</p>
+      <h1>The Source Auction</h1>
+    </div>
+    <span id="teamConnectionBadge" class="pill">Connecting…</span>
+  </header>
+
+  <main class="team-shell">
+    <section id="joinPanel" class="panel mobile-panel">
+      <p class="kicker">Join your tutorial game</p>
+      <h2>Enter the room</h2>
+      <p class="muted">Use the room code shown by the facilitator and the PIN assigned to your project group.</p>
+
+      <label>Room code
+        <input id="joinRoomCode" maxlength="6" autocomplete="off" placeholder="e.g. X7KQ2" />
+      </label>
+      <label>Project group
+        <select id="joinTeamId">
+          <option value="1">Group 1</option>
+          <option value="2">Group 2</option>
+          <option value="3">Group 3</option>
+          <option value="4">Group 4</option>
+          <option value="5">Group 5</option>
+          <option value="6">Group 6</option>
+        </select>
+      </label>
+      <label>Team PIN
+        <input id="joinPin" type="password" inputmode="numeric" maxlength="4" placeholder="4-digit PIN" />
+      </label>
+
+      <button id="joinRoomBtn" class="btn btn-primary btn-large full">Join Room</button>
+      <p id="joinMessage" class="status-text"></p>
+    </section>
+
+    <section id="teamRoom" class="hidden">
+      <section class="panel mobile-panel team-header-card">
+        <div>
+          <p class="kicker">Connected</p>
+          <h2 id="joinedTeamName">Project Group</h2>
+          <p>Room <strong id="joinedRoomCode">—</strong></p>
+        </div>
+        <button id="leaveRoomBtn" class="btn btn-secondary">Leave</button>
+      </section>
+
+      <section id="waitingPanel" class="panel mobile-panel">
+        <div class="waiting-icon waiting-pulse">⏳</div>
+        <h2 id="waitingTitle">Auction in progress</h2>
+        <p id="waitingText" class="muted">
+          Your facilitator is running the auction. Keep this page open. Your ranking screen will appear automatically when ranking opens.
+        </p>
+        <div id="teamPortfolio" class="portfolio-box"></div>
+      </section>
+
+      <section id="rankingPanel" class="panel mobile-panel hidden">
+        <p class="kicker">Final group decision</p>
+        <h2>Rank the six sources</h2>
+        <p class="muted">
+          Put the strongest source at the top and the weakest at the bottom.
+          Use the arrows to move each source. One person should submit on behalf of the whole project group.
+        </p>
+
+        <div id="rankingList" class="ranking-list"></div>
+
+        <button id="submitRankingBtn" class="btn btn-success btn-large full">Submit Final Ranking</button>
+        <p id="rankingMessage" class="status-text"></p>
+      </section>
+
+      <section id="submittedPanel" class="panel mobile-panel hidden">
+        <div class="success-icon success-pop">✅</div>
+        <h2>Ranking submitted</h2>
+        <p>Your group’s final ranking has been sent to the facilitator.</p>
+        <div id="submittedOrder" class="submitted-order"></div>
+        <p class="muted">Your ranking is locked for this room.</p>
+      </section>
+
+      <section id="closedPanel" class="panel mobile-panel hidden">
+        <div class="waiting-icon">🏁</div>
+        <h2>Ranking closed</h2>
+        <p class="muted">The facilitator has closed submissions and is calculating the final scores.</p>
+      </section>
+    </section>
+  </main>
+
+  <div id="teamToast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="team.js"></script>
+</body>
+</html>

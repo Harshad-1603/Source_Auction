@@ -1,27 +1,128 @@
-# The Source Auction
+# The Source Auction — Live Room Version
 
-A static, host-controlled browser game for **GSOE9010 Literature Search – Activity 1**.
+## Visual design
 
-It turns source evaluation into a Storage Wars-style auction while preserving the academic objective:
-- judge source reliability and quality;
-- rank/categorise sources;
-- discuss a suggested ranking and contentious examples.
+This build includes a colorful animated auction theme, glass-style panels, animated background orbs, hover effects, live-status pulses, source color coding, reveal animations, and a confetti + SOLD animation. Motion automatically reduces for users who prefer reduced motion.
 
-## Files
 
-- `index.html` – game interface
-- `style.css` – styling
-- `app.js` – all game logic
+This version is built for your exact classroom flow:
 
-No frameworks, packages, build tools, databases, or external services are required.
+- **You are the only auctioneer/host.**
+- Students do **not** place auction bids from their devices.
+- The six project groups can join using:
+  - one shared **room code**;
+  - their own **group number**;
+  - a private **4-digit team PIN**.
+- When you click **Open Ranking**, each joined group automatically gets the ranking interface.
+- Each group submits **one final ranking** from its own phone/laptop.
+- Your host screen receives the rankings live and uses them in the final score.
 
-## How to run locally
+## Why Firebase is required
 
-Option 1:
-Double-click `index.html`.
+GitHub Pages is a static host. By itself it cannot share live room state between your laptop and six student devices.
 
-Option 2:
-Run a tiny local server from this folder:
+This project therefore uses:
+
+- **GitHub Pages** — hosts the website.
+- **Firebase Authentication (Anonymous)** — gives every browser a temporary identity.
+- **Cloud Firestore** — stores the room, teams and final rankings in real time.
+
+You only need to set Firebase up once.
+
+---
+
+# Part 1 — Create a Firebase project
+
+1. Go to the Firebase Console.
+2. Click **Create a project**.
+3. Give it a name such as:
+   `source-auction-gsoe9010`
+4. Google Analytics is optional for this classroom project.
+
+---
+
+# Part 2 — Enable Anonymous Authentication
+
+1. Open your Firebase project.
+2. Go to **Build → Authentication**.
+3. Click **Get started**.
+4. Open **Sign-in method**.
+5. Enable **Anonymous** sign-in.
+6. Save.
+
+This lets the host and each team browser receive a temporary identity without asking students to make accounts.
+
+---
+
+# Part 3 — Create Firestore
+
+1. Go to **Build → Firestore Database**.
+2. Click **Create database**.
+3. Choose a Firestore location close to you.
+4. Start in **Production mode**.
+5. Create the database.
+
+---
+
+# Part 4 — Install the supplied Firestore rules
+
+Open:
+
+**Firestore Database → Rules**
+
+Delete the existing rules and paste the full contents of:
+
+`firestore.rules`
+
+Then click **Publish**.
+
+These rules do the important separation:
+
+- only the host browser can control auction data;
+- team PINs are only readable by the host;
+- a group can only join with its correct PIN;
+- teams can only submit while the host has opened ranking;
+- each group gets one final ranking submission.
+
+---
+
+# Part 5 — Register the website in Firebase
+
+1. Open **Project settings** in Firebase.
+2. Scroll to **Your apps**.
+3. Click the **Web** icon (`</>`).
+4. Give the app a name such as:
+   `Source Auction Web`
+5. You do NOT need Firebase Hosting because you are using GitHub Pages.
+6. Register the app.
+7. Firebase will show a configuration object that looks similar to:
+
+```js
+const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
+};
+```
+
+Open:
+
+`firebase-config.js`
+
+Replace the placeholder values with the values Firebase gives you.
+
+Do not change the variable name or the `export` line.
+
+---
+
+# Part 6 — Test locally
+
+Because this version uses JavaScript modules, use a local web server instead of double-clicking the HTML file.
+
+From the project folder:
 
 ```bash
 python -m http.server 8000
@@ -30,100 +131,230 @@ python -m http.server 8000
 Then open:
 
 ```text
-http://localhost:8000
+http://localhost:8000/
 ```
 
-## GitHub Pages deployment
+Test:
 
-1. Create a new GitHub repository.
-2. Upload `index.html`, `style.css`, and `app.js` to the repository root.
-3. Commit and push.
-4. Open **Repository Settings → Pages**.
-5. Under **Build and deployment**, choose **Deploy from a branch**.
-6. Select your main branch and `/ (root)`.
-7. Save.
-8. GitHub will provide the public Pages URL.
+1. Open **Host the Game**.
+2. Create a room.
+3. Note the room code and one team PIN.
+4. Open another browser/incognito window or phone.
+5. Open:
+   `http://YOUR-COMPUTER-IP:8000/team.html`
+   if testing over your local network, or simply use another tab for a basic same-computer test.
+6. Join with the room code + team PIN.
+7. On the host, click **Open Ranking**.
+8. Confirm the team screen automatically shows the ranking list.
+9. Submit.
+10. Confirm the host screen immediately shows the submitted ranking.
 
-## Recommended classroom flow
+For the real tutorial, GitHub Pages will make this much easier because every phone can open the public URL.
 
-1. **Setup**
-   - Six teams.
-   - $1,000 starting budget.
-   - $50 minimum bid.
-   - $50 bid increment.
-   - Maximum two sources per team.
+---
 
-2. **Auction**
-   - Run Lots A–F.
-   - Groups bid verbally.
-   - The host clicks the bidding group and then **SOLD!**
+# Part 7 — Put it on GitHub Pages
 
-3. **Market Update**
-   - Reveal Update #1 after roughly half the lots have sold.
-   - Reveal Final Intelligence after the auction.
+Upload these files to the ROOT of your GitHub repository:
 
-4. **Trading Floor**
-   - Give teams 60 seconds.
-   - They can sell, transfer or swap sources.
-   - Use the host controls to record the final deal.
-
-5. **Ranking**
-   - Each group ranks all sources from strongest to weakest.
-   - Enter orders such as `ABCDEF`.
-   - Reveal the suggested ranking only after teams commit.
-
-6. **Results**
-   - Source points:
-     - A = 12
-     - B = 10
-     - C = 8
-     - D = 6
-     - E = 3
-     - F = 1
-   - Cash bonus:
-     - +1 per $100 remaining
-     - capped at +5
-   - Ranking bonus:
-     - +3 if top three are exactly A-B-C
-     - +1 if A is ranked strongest
-     - +1 if F is ranked weakest
-
-## Suggested source meanings
-
-- **A** – recent peer-reviewed journal article
-- **B** – Australian Government technical report
-- **C** – recent academic conference paper
-- **D** – company technical white paper
-- **E** – Wikipedia article with references
-- **F** – personal blog with no references
-
-Treat the final ordering as a **suggested classroom ranking**, not a universal rule. The point of the debrief is to discuss why context, relevance, recency, evidence and possible bias matter.
-
-## Editing content
-
-Open `app.js`.
-
-Near the top you will see the `lots` array. Edit:
-- `title`
-- `teaser`
-- `update1`
-- `final`
-
-You can also change scoring in:
-
-```js
-const SOURCE_POINTS = { A: 12, B: 10, C: 8, D: 6, E: 3, F: 1 };
+```text
+index.html
+host.html
+team.html
+styles.css
+host.js
+team.js
+game-data.js
+firebase-config.js
+firestore.rules
+README.md
 ```
 
-## Important limitation
+Then:
 
-This version is intentionally **static and host-controlled**.
+1. Repository → **Settings**
+2. **Pages**
+3. Source → **Deploy from a branch**
+4. Branch → `main`
+5. Folder → `/ (root)`
+6. Save
 
-If every project group opens the GitHub Pages link on separate phones/laptops, their browsers will not share live state with one another.
+Your public link will look similar to:
 
-For the tutorial, the easiest setup is:
-- one host laptop connected to the projector;
-- teams bid verbally;
-- the host records bids, sales, trades and rankings on the site.
+```text
+https://YOUR-GITHUB-USERNAME.github.io/source-auction-live/
+```
 
-A future version could add Firebase/Supabase for true multi-device live bidding.
+Host opens:
+
+```text
+https://YOUR-GITHUB-USERNAME.github.io/source-auction-live/host.html
+```
+
+Students can open:
+
+```text
+https://YOUR-GITHUB-USERNAME.github.io/source-auction-live/team.html
+```
+
+Or simply open the root page and tap **Join as a Project Group**.
+
+---
+
+# Classroom flow
+
+## Before class
+
+1. Open the website on your laptop.
+2. Open **Host the Game**.
+3. Click **Create Room**.
+4. Project the:
+   - room code;
+   - six group PINs.
+
+Example:
+
+```text
+ROOM: X7KQ2
+
+Group 1: 4821
+Group 2: 7034
+Group 3: 1662
+Group 4: 9450
+Group 5: 3218
+Group 6: 5571
+```
+
+Each project group needs only ONE phone/laptop to submit.
+
+## During the auction
+
+You conduct all bidding verbally.
+
+When a group calls a bid:
+- click that group on your host screen.
+
+When bidding ends:
+- click **SOLD!**
+
+Student devices do not control bidding.
+
+## Market update
+
+Use:
+
+- **Reveal Update #1**
+- **Reveal Final Intelligence**
+
+You remain in control of these.
+
+## Trading
+
+Teams negotiate verbally in the classroom.
+
+You record the agreed:
+- source transfer;
+- purchase;
+- swap
+
+on the host page.
+
+## Final ranking
+
+When you are ready:
+
+1. Open **Team Ranking** on the host page.
+2. Click **Open Ranking**.
+3. Every joined student group automatically sees the six-source ranking screen.
+4. They use ↑ / ↓ controls to rank:
+   - strongest source at the top;
+   - weakest source at the bottom.
+5. One person from the group presses **Submit Final Ranking**.
+6. Their submission appears live on your screen.
+7. Once all six groups have submitted, click **Close Ranking**.
+8. Open **Results**.
+
+---
+
+# Scoring currently used
+
+## Source ownership
+
+- A = 12 points
+- B = 10
+- C = 8
+- D = 6
+- E = 3
+- F = 1
+
+## Cash
+
+- +1 point for every $100 remaining
+- maximum cash bonus = +5
+
+## Final ranking
+
+- +3 if the group's top three are exactly A → B → C
+- +1 if A is ranked strongest
+- +1 if F is ranked weakest
+
+You can change these numbers in:
+
+`game-data.js`
+
+and the `rankingBonus()` function in `host.js`.
+
+---
+
+# Important classroom note
+
+Treat:
+
+`A → B → C → D → E → F`
+
+as your **suggested ranking for this designed exercise**, not as a universal law about source types.
+
+The educational discussion is more important than the exact numbers.
+
+For example, you can ask:
+
+- Could a government report be stronger than a journal article for a particular question?
+- When might a company white paper still be useful?
+- Can Wikipedia be useful for finding original sources even when it is not the source you ultimately cite?
+- Can a high-quality paper still be irrelevant to the actual project question?
+
+---
+
+# If a team submits the wrong ranking accidentally
+
+This version intentionally allows **one final submission per team**.
+
+If there is a genuine mistake:
+
+1. Open Firebase Console.
+2. Firestore Database.
+3. Find:
+   `rooms → ROOMCODE → submissions → TEAMNUMBER`
+4. Delete that one submission document.
+5. The group can then submit again while ranking is still open.
+
+For the tutorial, tell teams to agree before they press Submit.
+
+---
+
+# Files you normally edit
+
+### Source text / hidden clues
+`game-data.js`
+
+### Firebase connection
+`firebase-config.js`
+
+### Styles
+`styles.css`
+
+### Scoring / host behaviour
+`host.js`
+
+### Team ranking behaviour
+`team.js`

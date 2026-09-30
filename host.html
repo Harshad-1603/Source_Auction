@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Host · The Source Auction</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient-bg" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+    <span class="grid-glow"></span>
+  </div>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Host Console</p>
+      <h1>The Source Auction</h1>
+    </div>
+    <div class="host-room-summary">
+      <span id="connectionBadge" class="pill">Connecting…</span>
+      <span id="roomBadge" class="pill hidden">Room —</span>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section id="hostSetup" class="panel">
+      <div class="section-head">
+        <div>
+          <p class="kicker">Step 1</p>
+          <h2>Create the live classroom room</h2>
+          <p class="muted">You run the auction. Teams only use the room to join and submit their final ranking.</p>
+        </div>
+      </div>
+
+      <div class="setup-grid">
+        <label>Starting budget
+          <input id="startingBudget" type="number" value="1000" step="50" min="100" />
+        </label>
+        <label>Minimum bid
+          <input id="minimumBid" type="number" value="50" step="50" min="50" />
+        </label>
+        <label>Bid increment
+          <input id="bidIncrement" type="number" value="50" step="50" min="50" />
+        </label>
+        <label>Maximum sources per team
+          <input id="maxSources" type="number" value="2" min="1" max="6" />
+        </label>
+      </div>
+
+      <h3>Project group names</h3>
+      <div id="teamNameSetup" class="team-name-grid"></div>
+
+      <div class="button-row">
+        <button id="createRoomBtn" class="btn btn-primary btn-large">Create Room</button>
+        <button id="resumeRoomBtn" class="btn btn-secondary btn-large">Resume Room From This Browser</button>
+      </div>
+      <p id="setupMessage" class="status-text"></p>
+    </section>
+
+    <section id="hostGame" class="hidden">
+      <section class="room-hero panel">
+        <div>
+          <p class="kicker">Student join details</p>
+          <div class="room-code-label">LIVE ROOM CODE</div>
+          <div class="room-code-wrap">
+            <span class="live-dot" aria-hidden="true"></span>
+            <div id="roomCodeBig" class="room-code">—</div>
+          </div>
+          <p class="muted">Students open <strong>team.html</strong>, enter this room code, select their group and use the matching PIN.</p>
+        </div>
+        <div id="pinGrid" class="pin-grid"></div>
+      </section>
+
+      <nav class="tabs">
+        <button class="tab active" data-host-tab="auction">Auction</button>
+        <button class="tab" data-host-tab="intel">Market Updates</button>
+        <button class="tab" data-host-tab="trade">Trading</button>
+        <button class="tab" data-host-tab="ranking">Team Ranking</button>
+        <button class="tab" data-host-tab="results">Results</button>
+      </nav>
+
+      <section id="host-auction" class="host-tab-view active">
+        <div class="two-col">
+          <div class="panel">
+            <div class="lot-head">
+              <span id="lotBadge" class="source-badge">LOT A</span>
+              <span id="lotStatus" class="pill">AVAILABLE</span>
+            </div>
+            <h2 id="lotTitle"></h2>
+            <p id="lotTeaser" class="lead"></p>
+
+            <div class="metric-grid">
+              <div class="metric-card metric-bid">
+                <span>Current bid</span>
+                <strong id="currentBid">$0</strong>
+                <div class="bid-wave" aria-hidden="true"></div>
+              </div>
+              <div class="metric-card">
+                <span>Highest bidder</span>
+                <strong id="highestBidder">—</strong>
+              </div>
+            </div>
+
+            <p class="muted">You are the auctioneer. Click the team that calls the next valid bid.</p>
+            <div id="bidButtons" class="bid-buttons"></div>
+
+            <div class="button-row spread">
+              <button id="prevLotBtn" class="btn btn-secondary">← Previous Lot</button>
+              <button id="soldBtn" class="btn btn-success btn-large">SOLD!</button>
+              <button id="nextLotBtn" class="btn btn-primary">Next Lot →</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <p class="kicker">Live ownership</p>
+            <h2>Team portfolios</h2>
+            <div id="auctionTeamCards" class="team-cards"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="host-intel" class="host-tab-view">
+        <div class="panel">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Breaking research intelligence</p>
+              <h2>Market Updates</h2>
+            </div>
+            <div class="button-row">
+              <button id="update1Btn" class="btn btn-warning">Reveal Update #1</button>
+              <button id="finalIntelBtn" class="btn btn-primary">Reveal Final Intelligence</button>
+            </div>
+          </div>
+          <div id="intelGrid" class="intel-grid"></div>
+        </div>
+      </section>
+
+      <section id="host-trade" class="host-tab-view">
+        <div class="panel">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Host records agreed deals</p>
+              <h2>Trading Floor</h2>
+            </div>
+          </div>
+
+          <div class="trade-grid">
+            <div class="subpanel">
+              <h3>Sell / transfer a source</h3>
+              <label>From team <select id="tradeFrom"></select></label>
+              <label>Source <select id="tradeSource"></select></label>
+              <label>To team <select id="tradeTo"></select></label>
+              <label>Cash paid by receiving team
+                <input id="tradePrice" type="number" value="0" min="0" step="50" />
+              </label>
+              <button id="transferBtn" class="btn btn-primary">Record Transfer</button>
+            </div>
+
+            <div class="subpanel">
+              <h3>Swap two sources</h3>
+              <label>Team A <select id="swapA"></select></label>
+              <label>Team A source <select id="swapSourceA"></select></label>
+              <label>Team B <select id="swapB"></select></label>
+              <label>Team B source <select id="swapSourceB"></select></label>
+              <button id="swapBtn" class="btn btn-primary">Record Swap</button>
+            </div>
+          </div>
+
+          <div id="tradeTeamCards" class="team-cards cards-3"></div>
+        </div>
+      </section>
+
+      <section id="host-ranking" class="host-tab-view">
+        <div class="panel">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Students submit from their own devices</p>
+              <h2>Final Source Ranking</h2>
+              <p class="muted">Open ranking only after the auction, final intelligence and trading are complete.</p>
+            </div>
+            <div class="button-row">
+              <button id="openRankingBtn" class="btn btn-success">Open Ranking</button>
+              <button id="closeRankingBtn" class="btn btn-danger">Close Ranking</button>
+            </div>
+          </div>
+
+          <div id="rankingStatusBanner" class="info-box">Ranking is not open yet.</div>
+          <div id="submissionGrid" class="submission-grid"></div>
+
+          <div class="suggested-block">
+            <button id="toggleSuggestedBtn" class="btn btn-warning">Reveal Suggested Ranking to Host</button>
+            <div id="suggestedRankingHost" class="hidden suggested-ranking">
+              <strong>Suggested ranking:</strong> A → B → C → D → E → F
+              <p>Use this as a discussion prompt, not as a universal rule for every research context.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="host-results" class="host-tab-view">
+        <div class="panel">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Automatic scoring</p>
+              <h2>Research Investment Champions</h2>
+            </div>
+            <button id="recalculateBtn" class="btn btn-primary">Recalculate</button>
+          </div>
+
+          <div class="score-rule">
+            <strong>Source points:</strong> A=12 · B=10 · C=8 · D=6 · E=3 · F=1<br/>
+            <strong>Cash bonus:</strong> +1 per $100 left, capped at +5<br/>
+            <strong>Ranking bonus:</strong> +3 exact top-three A-B-C · +1 strongest A · +1 weakest F
+          </div>
+
+          <div id="winnerBanner" class="winner-banner">Waiting for rankings…</div>
+          <div id="resultsWrap"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="soldOverlay" class="sold-overlay" aria-hidden="true"><div class="sold-stamp">SOLD!</div></div>
+
+  <script type="module" src="host.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isHost(roomCode) {
+      return signedIn()
+        && get(/databases/$(database)/documents/rooms/$(roomCode)).data.hostUid == request.auth.uid;
+    }
+
+    match /rooms/{roomCode} {
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && request.resource.data.hostUid == request.auth.uid;
+
+      allow update, delete: if isHost(roomCode);
+
+      match /teams/{teamId} {
+        allow read: if signedIn();
+        allow write: if isHost(roomCode);
+      }
+
+      match /privatePins/{teamId} {
+        allow read, write: if isHost(roomCode);
+      }
+
+      match /joins/{uid} {
+        allow read: if signedIn()
+          && (request.auth.uid == uid || isHost(roomCode));
+
+        allow create, update: if signedIn()
+          && request.auth.uid == uid
+          && request.resource.data.uid == uid
+          && request.resource.data.teamId in ['1','2','3','4','5','6']
+          && request.resource.data.pin ==
+             get(/databases/$(database)/documents/rooms/$(roomCode)/privatePins/$(request.resource.data.teamId)).data.pin;
+
+        allow delete: if request.auth.uid == uid || isHost(roomCode);
+      }
+
+      match /submissions/{teamId} {
+        allow read: if isHost(roomCode);
+
+        allow create: if signedIn()
+          && get(/databases/$(database)/documents/rooms/$(roomCode)).data.status == 'ranking'
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.teamId == teamId
+          && get(/databases/$(database)/documents/rooms/$(roomCode)/joins/$(request.auth.uid)).data.teamId == teamId
+          && request.resource.data.ranking.matches('^[A-F]{6}$');
+
+        // One final submission per team/device. Host can delete it if a genuine correction is needed.
+        allow update: if false;
+
+        allow delete: if isHost(roomCode);
+      }
+
+      match /{document=**} {
+        allow read, write: if false;
+      }
+    }
+  }
+}
